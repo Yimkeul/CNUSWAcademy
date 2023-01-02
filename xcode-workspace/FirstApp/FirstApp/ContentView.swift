@@ -9,8 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Button{ print("Clicked")} label:{Text("Hello Yimkeul")}
+        let name:String = "Yimkeul" + "1"
         
+        VStack{
+//            Text("my name is " + name)
+            Text("my name is \(name)")
+        }
+            
         
     }
     
