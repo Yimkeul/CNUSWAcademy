@@ -8,8 +8,26 @@
 import SwiftUI
 
 struct MyFunction: View {
+    
+    @State var myMind :String = "nothing"
+    @State var isChangedMind: Bool = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text(myMind)
+            Button{
+                isChangedMind.toggle()
+                myMind = getMind(with: isChangedMind)
+            }label: {
+                Text("Changed my Mind")
+            }
+        }
+    }
+    func getMind (with isChangedMind:Bool) -> String{
+        if isChangedMind {
+            return "always open"
+        }else{
+            return "but closed"
+        }
     }
 }
 
