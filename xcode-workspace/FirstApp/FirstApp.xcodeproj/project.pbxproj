@@ -16,6 +16,7 @@
 		86009E10296273E000BF38D6 /* FirstAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86009E0F296273E000BF38D6 /* FirstAppUITestsLaunchTests.swift */; };
 		8674E53A29654E3C000474D9 /* SwitchEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8674E53929654E3C000474D9 /* SwitchEnum.swift */; };
 		8682F58629655CC000A5BBBE /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8682F58529655CC000A5BBBE /* Option.swift */; };
+		8682F589296564CB00A5BBBE /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8682F588296564CA00A5BBBE /* Closure.swift */; };
 		869F037C2964883700B7F592 /* MyFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869F037B2964883700B7F592 /* MyFunction.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		86009E0F296273E000BF38D6 /* FirstAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8674E53929654E3C000474D9 /* SwitchEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchEnum.swift; sourceTree = "<group>"; };
 		8682F58529655CC000A5BBBE /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		8682F588296564CA00A5BBBE /* Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closure.swift; sourceTree = "<group>"; };
 		869F037B2964883700B7F592 /* MyFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFunction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +102,7 @@
 		86009DF1296273DD00BF38D6 /* FirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				8682F587296564BD00A5BBBE /* Closure */,
 				8674E53729654DBA000474D9 /* SwitchEnum */,
 				869F037A2964882400B7F592 /* Function */,
 				86009DF2296273DD00BF38D6 /* FirstAppApp.swift */,
@@ -150,6 +153,14 @@
 				8682F58529655CC000A5BBBE /* Option.swift */,
 			);
 			path = Option;
+			sourceTree = "<group>";
+		};
+		8682F587296564BD00A5BBBE /* Closure */ = {
+			isa = PBXGroup;
+			children = (
+				8682F588296564CA00A5BBBE /* Closure.swift */,
+			);
+			path = Closure;
 			sourceTree = "<group>";
 		};
 		869F037A2964882400B7F592 /* Function */ = {
@@ -295,6 +306,7 @@
 				8682F58629655CC000A5BBBE /* Option.swift in Sources */,
 				8674E53A29654E3C000474D9 /* SwitchEnum.swift in Sources */,
 				869F037C2964883700B7F592 /* MyFunction.swift in Sources */,
+				8682F589296564CB00A5BBBE /* Closure.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

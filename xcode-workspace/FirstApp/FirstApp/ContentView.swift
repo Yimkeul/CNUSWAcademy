@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        let name:String = "Yimkeul" + "1"
+//        let name:String = "Yimkeul" + "1"
         
-        VStack{
-//            Text("my name is " + name)
-            Text("my name is \(name)")
-        }
-            
+//        VStack{
+////            Text("my name is " + name)
+//            Text("my name is \(name)")
+//        }
         
+        Closure()
     }
     
     struct ContentView_Previews: PreviewProvider {
