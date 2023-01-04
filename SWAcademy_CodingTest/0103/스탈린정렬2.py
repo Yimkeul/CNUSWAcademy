@@ -16,6 +16,7 @@ def printArray (array):
     for i in array:
         print(i, end=" ")
     print()
+    
 
 TestCase = int(input())
 for _ in range(TestCase):
