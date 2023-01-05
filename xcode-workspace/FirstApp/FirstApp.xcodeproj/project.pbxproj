@@ -18,6 +18,7 @@
 		8682F58629655CC000A5BBBE /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8682F58529655CC000A5BBBE /* Option.swift */; };
 		8682F589296564CB00A5BBBE /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8682F588296564CA00A5BBBE /* Closure.swift */; };
 		869F037C2964883700B7F592 /* MyFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869F037B2964883700B7F592 /* MyFunction.swift */; };
+		86BFF85E2965AFFE00D7FD62 /* MyStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BFF85D2965AFFE00D7FD62 /* MyStruct.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		8682F58529655CC000A5BBBE /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		8682F588296564CA00A5BBBE /* Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closure.swift; sourceTree = "<group>"; };
 		869F037B2964883700B7F592 /* MyFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFunction.swift; sourceTree = "<group>"; };
+		86BFF85D2965AFFE00D7FD62 /* MyStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStruct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 		86009DF1296273DD00BF38D6 /* FirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				86BFF85C2965AFEE00D7FD62 /* Object */,
 				8682F587296564BD00A5BBBE /* Closure */,
 				8674E53729654DBA000474D9 /* SwitchEnum */,
 				869F037A2964882400B7F592 /* Function */,
@@ -169,6 +172,14 @@
 				869F037B2964883700B7F592 /* MyFunction.swift */,
 			);
 			path = Function;
+			sourceTree = "<group>";
+		};
+		86BFF85C2965AFEE00D7FD62 /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				86BFF85D2965AFFE00D7FD62 /* MyStruct.swift */,
+			);
+			path = Object;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +314,7 @@
 			files = (
 				86009DF5296273DD00BF38D6 /* ContentView.swift in Sources */,
 				86009DF3296273DD00BF38D6 /* FirstAppApp.swift in Sources */,
+				86BFF85E2965AFFE00D7FD62 /* MyStruct.swift in Sources */,
 				8682F58629655CC000A5BBBE /* Option.swift in Sources */,
 				8674E53A29654E3C000474D9 /* SwitchEnum.swift in Sources */,
 				869F037C2964883700B7F592 /* MyFunction.swift in Sources */,
