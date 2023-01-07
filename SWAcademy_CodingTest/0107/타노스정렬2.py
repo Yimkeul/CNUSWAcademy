@@ -4,19 +4,16 @@ def printArray (array):
         print(i, end=" ")
     print()
 
-def thanossort (array):
 
-    if(len(array) == 1 ):
-        print(array[0])
-    else:
-        i = 0
-        while i<len(array)-1:
-            if array[i] > array[i+1]:
-                array[i] //= 2
-                i=0
-            else:
-                i+=1
-        printArray(array)
+#역순
+def thanossort (array):
+    i = len(array)-1
+    while i>0:
+        if array[i-1] > array[i]:
+            array[i-1] //=2
+            i+=1
+        i-=1
+    printArray(array)
 
     
 TestCase = int(input())
