@@ -1,0 +1,240 @@
+@GuideBook(title: "Image Gallery", icon: title.png, background: titleBackground.png, firstFile: ImageGalleryApp.swift) {
+    @WelcomeMessage(title: "Image Gallery") {
+        This walkthrough shows you how to create a grid of images, complete with photo-picking and -editing capabilities.
+    }
+    @Guide {
+        @Step(title: "Image Gallery") {
+            @ContentAndMedia {
+                ![](intro.png)  
+
+                In Image Gallery, you’ll learn how to create a grid of images, complete with photo-picking and -editing capabilities.
+                
+                The Image Gallery app is an extension of two simpler implementations: [Organizing with Grids](x-com-apple-playgrounds://projects?contentId=com.apple.playgrounds.organizingwithgrids) and [Editing Grids](x-com-apple-playgrounds://projects?contentId=com.apple.playgrounds.editinggrids). This walkthrough focuses on solving some common issues after your grid displays images, instead of shapes or SF Symbols.
+                
+                Larger images can load slowly, which can cause noticeable delays when loading your app’s UI. To keep your app responsive during the loading process, this walkthrough focuses on unblocking delays by showing progress indicators until each image loads.
+                
+                @GuideButton(type: walkthrough, title: "Start Walkthrough", description: "AX description for button")
+            }
+            @TaskGroup(title: "Modeling the grid") { 
+                @Task(type: walkthrough, title: "Model an item", id: "item", file: Item.swift) {
+                    Explore how to model a grid item using a [structure](glossary://structure).
+                    
+                    @Page(id: "2.itemModel", title: "") {
+                        When you use `ForEach` to construct a collection view, such as a list or grid, SwiftUI wants to uniquely identify each view so it can find and update them. To make this easier, you can create a model that [conforms](glossary://conform) to [Identifiable](doc://com.apple.documentation/documentation/swift/identifiable/), which creates an `id` property requirement.
+                    }
+                    @Page(id: "2.id", title: "") {
+                        Your `Item` contains an `id` [property](glossary://property) that SwiftUI uses to uniquely identify the view. 
+                    }
+                    @Page(id: "2.url", title: "") {
+                        `Item` also has a `url` property that the app uses to identify the location of the corresponding image using a path to the file. `AsyncImage` uses this URL in `GridItemView` to asynchronously load the image.
+                    }
+                }
+                @Task(type: walkthrough, title: "Data model: Gather image URLs", id: "dataModel", file: DataModel.swift) {
+                    Learn how your app uses a data model to load and store all photo data.
+                    
+                    @Page(id: "3.dataModel", title: "") {
+                        `DataModel` is an [observable object](glossary://observable%20object) that gathers file URLs from images in your Documents directory as well as from your app’s [bundle](glossary://bundle) resources. It uses the URLs to populate an array of `Item` instances that display as the content of your grid. 
+                    }
+                    @Page(id: "3.items", title: "") {
+                        `DataModel` publishes an array of `item` values, each of which correlates to an image in the grid. Because the code marks this value as `@Published`, any time you add or delete an `Item` from this array, SwiftUI updates the grid view (and any other views that use this value) to reflect those changes.
+                    }
+                    @Page(id: "3.preloadItemsDocumentDirectory", title: "") {
+                        When you [initialize](glossary://initialization) the `DataModel`, it searches the Documents directory for any images you’ve added, gathering their corresponding URLs and appending them to the `items` array. Your app stores data locally in this directory, so searching here allows you to display any images you added while using the app.
+                    }
+                    @Page(id: "3.preloadItemsBundleResources", title: "") {
+                        Similarly, you’ll load all image URLs from the resources directory in the app’s main [bundle’s](glossary://bundle) and add them to `items`. This bundle contains a directory of images that are included with the project, as opposed to images that you added yourself.
+                    }
+                    @Page(id: "3.addItem", title: "") {
+                        `DataModel` provides methods for adding and removing elements from `items`. `addItem` adds a new element at the first index of the array so you can see when new images appear in the view.
+                    }
+                    @Page(id: "3.removeItem", title: "") {
+                        `removeItem` removes an element by finding its index and removing it from the `items` array. The method also removes the element’s corresponding image file from the Documents directory, if it exists there. This ensures that the image won’t reload from local app storage the next time you launch the app.
+                    }
+                }
+            }
+            @TaskGroup(title: "Creating the Grid") { 
+                @Task(type: walkthrough, title: "Share app data", id: "photoGridApp", file: ImageGalleryApp.swift) {
+                    Learn how the app passes photo data from `DataModel` to its [view hierarchy](glossary://view%20hierarchy).
+                    
+                    @Page(id: "1.photoGallery", title: "") {
+                        Image Gallery loads a gallery of images when you first launch the app. Because the images are so large, and you don’t want the app to lag when loading them all at the same time, you’ll use [asynchronous](glossary://asynchronous%20process) requests to keep the app responsive even when data retrieval is slow. 
+                    }
+                    @Page(id: "1.dataModel", title: "") {
+                        To create `dataModel` as a [state object](glossary://state%20object), apply the `@StateObject` [property wrapper](glossary://property%20wrapper) and provide an initial value that conforms to the `ObservableObject` protocol. SwiftUI manages storage for a state object, and updates all of the [subviews](glossary://subview) that use the value when the [published values](glossary://published%20value) change.
+                    }
+                    @Page(id: "1.environmentObject", title: "") {
+                        The [NavigationStack](doc://com.apple.documentation/documentation/swiftui/navigationstack) structure passes in the `DataModel` [instance](glossary://instance) using the `.environmentObject` modifier, making the [observable object](glossary://observable%20object) available to all of the [subviews views](glossary://subview) in the `NavigationStack`. As a result, those views can access the data from `dataModel` to perform various tasks, such as loading image views asynchronously or updating the grid view when the data changes. 
+                    }
+                }
+                @Task(type: walkthrough, title: "Create a grid item", id: "gridItemView", file: GridItemView.swift) {
+                    Find out how to load an image [asynchronously](glossary://asynchronous%20process) from a URL using [AsyncImage](doc://com.apple.documentation/documentation/swiftui/asyncimage).
+                    
+                    @Page(id: "4.gridItemView", title: "") {
+                        `GridItemView` represents a single item of your grid, an image view that displays the photo defined by an `Item` instance.
+                    }
+                    @Page(id: "4.properties", title: "") {
+                        A `GridItemView` contains a property for `item`, which provides the URL to asynchronously load the image.
+                    }
+                    @Page(id: "4.zStack", title: "") {
+                        In the `body` of your `GridItemView`, you’ll create your image view. Because you’ll have a conditional editing UI overlaid on top of your image, wrap the image in a [ZStack](doc://com.apple.documentation/documentation/swiftui/zstack).
+                    }
+                    @Page(id: "4.asyncImage", title: "") {
+                        You can initialize an [AsyncImage](doc://com.apple.documentation/documentation/swiftui/asyncimage) with the `item.url` value to load the image [asynchronously](glossary://asynchronous%20process). Because you have many images to load when the app first launches, you can load them asynchronously to allow the app to keep running the rest of its code while it waits for the images to return. This prevents any noticable lag in your UI.
+                    }
+                    @Page(id: "4.imageView", title: "") {
+                        `AsyncImage` contains a `content` [closure](glossary://closure) that provides an [instance](glossary://instance) of a SwiftUI `Image`. You’ll use this instance to create the image view. You’ll add the `.resizable` and `.aspectRatio(contentMode: .fill)` modifiers to scale the image to fill the available space of the view.
+                    }
+                    @Page(id: "4.progressView", title: "") {
+                        `AsyncImage` uses a placeholder to show some content while loading the image. The placeholder uses a SwiftUI [ProgressView](doc://com.apple.documentation/documentation/swiftui/progressview), which displays as a spinning circle.
+                    }
+                }
+                @Task(type: walkthrough, title: "Create your gallery", id: "gridView", file: GridView.swift) {
+                    Learn how to put together a grid view using a series of SwiftUI built-in and [composed views](glossary://composed%20view).
+                    
+                    @Page(id: "5.gridView", title: "") {
+                        `GridView` is where you’ll create your image gallery. If you need to review the basics of creating a grid, see [Organizing with Grids](x-com-apple-playgrounds://projects?contentId=com.apple.playgrounds.organizingwithgrids). In this walkthrough, you’ll learn how to implement the grid using a model type, `Item`, and an observable object, `dataModel`.
+                    }
+                    @Page(id: "5.dataModel", title: "") {
+                        To access the app’s `dataModel`, you define an `@EnvironmentObject` of type `DataModel`, which gives you access to the [environment object](glossary://environment%20object) passed into the top-level view of the [view hierarchy](glossary://view%20hierarchy) in `ImageGalleryApp.swift`.
+                    }
+                    @Page(id: "5.dataModel", title: "") {
+                        The data for populating the grid comes from an array of `Item` instances (found in `dataModel.items`), each of which references a single image URL.
+                    }
+                    @Page(id: "5.gridImplementation", title: "") {
+                        To create the grid, nest a [LazyVGrid](doc://com.apple.documentation/documentation/swiftui/lazyvgrid) inside of a [ScrollView](doc://com.apple.documentation/documentation/swiftui/scrollview) to allow the content of the grid to scroll vertically, if necessary.
+                    }
+                    @Page(id: "5.forEach", title: "") {
+                        Your [ForEach](doc://com.apple.documentation/documentation/swiftui/foreach) loop iterates through `dataModel.items`, and creates a `GridItemView` based upon each `item` value in the array. Because each `item` instance is [Identifiable](doc://com.apple.documentation/documentation/swift/identifiable), you don’t need an `id` [parameter](glossary://parameter) when creating your grid views. Instead, SwiftUI uses the `id` property of each `item` to uniquely identify it.
+                    }
+                    @Page(id: "5.geometryReader", title: "") {
+                        To display all of the images as equally-sized squares in the grid, create a `Rectangle` view and set its aspect ratio to a value of `1`. This renders the rectangle with an equal width and length, creating a square. You can then overlay your image onto that square as a `GridItemView`, which scales to fill the available space of the square.
+                    }
+                    @Page(id: "5.gridItemView", title: "") {
+                        To simplify the code in `GridView`, generate each view of the grid using a `GridItemView`, which handles all of the asynchronous image loading as well as transitions between editing states.
+                    }
+                    @Page(id: "5.gridParameters", title: "") {
+                        To initialize `GridItemView`, pass in the current `item` from the `ForEach` loop. 
+                    }
+                }
+                @Task(type: walkthrough, title: "Add an image to the gallery", id: "addAnImage", file: GridView.swift) {
+                    Explore how to add and edit photos in the gallery.
+                    
+                    @Page(id: "6.isAddingPhoto", title: "") {
+                        To add a new photo to the grid, you’ll use the state value `isAddingPhoto`. You’ll toggle this value to `true` whenever you press the Add button (+) in the toolbar.
+                    }
+                    @Page(id: "6.isEditingPhotos", title: "") {
+                        To edit your photo grid, you’ll use the [state value](glossary://state%20value) `isEditing`. You’ll add a Remove button (x) on top of each image when the value toggles to `true`.
+                    }
+                    @Page(id: "6.toolbar", title: "") {
+                        The `.toolbar` modifier contains two toolbar items: one to edit photos in the grid and one to add a new photo. These buttons toggle the state values `isEditing` and `isAddingPhoto`, respectively.
+                    }
+                    @Page(id: "6.editUI", title: "") {
+                        When `isEditing` is `true`, you’ll show a Remove button (x) on top of the images.
+                    }
+                    @Page(id: "6.removeAction", title: "") {
+                        When a person taps the Remove button (x), the code removes the current item from `dataModel.items`. Because `dataModel.items` is a [published value](glossary://published%20value), this change causes SwiftUI to update the grid view’s appearance and remove the item.
+                    }
+                    @Page(id: "6.sheet", title: "") {
+                        When `isAddingPhoto` is `true`, a sheet displays a modal `PhotoPicker` view. In `PhotoPicker`, selecting a new photo adds the corresponding `item` to `DataModel.items`. This causes SwiftUI to update the grid view and add the corresponding image.
+                    }
+                }
+            }
+            @TaskGroup(title: "Favoriting your photos") { 
+                @Task(type: experiment, title: "Add a new property to an item", id: "isFavoriteItem", file: Item.swift) {
+                    Add the `isFavorite` property to `Item`.
+                    
+                    @Page(id: "addAFavorite", title: "") {
+                       What if you wanted the ability to favorite the best images in your gallery? Can you think of how you might go about implementing that? 
+                       
+                       If you’re feeling confident, go ahead and try adding this functionality on your own, using the following instructions if you get stuck.
+                    }
+                    @Page(id: "addFavoriteProperty", title: "") {
+                       First, you’ll add a property to `Item` so the app can track the favorited images: 
+                       
+                       ```
+                       var isFavorite = false
+                       ```
+                    }
+                    @Page(id: "oneHiccup", title: "") {
+                       Now you can change the value of `isFavorite` on any of your `Item` [instances](glossary://instance). 
+                       
+                       Next, you’ll create a button that allows you to change the `isFavorite` value from `DetailView`.
+                    }
+                }
+                @Task(type: experiment, title: "Toggle a favorited item", id: "detailViewToggle", file: DetailView.swift) {
+                    Add the ability to toggle a favorite from `DetailView`.
+                    
+                    @Page(id: "markImageAsFavorite", title: "") {
+                        Next, you’ll need to add a way to mark one of your images as a favorite. You can do this by adding a `Button` to your `DetailView` that calls `item.isFavorite.toggle()` when someone taps the button. 
+                    }
+                    @Page(id: "addButton", title: "") {
+                        Add the `Button` below the `AsyncImage` view. 
+                        
+                        This displays a full heart if someone favorites the image, and the outline of a heart if it hasn’t.
+                        
+                        ```
+                        Button { 
+                            item.isFavorite.toggle()
+                        } label: { 
+                            Label("Favorite", systemImage: item.isFavorite ? "heart.fill" : "heart")
+                                .font(.system(size: 24))
+                        }
+                        ```
+                    }
+                    @Page(id: "addModifiers", title: "") {
+                        To make the button look a bit more presentable, you can add the following modifiers: 
+                        
+                        ```
+                        .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
+                        .padding(EdgeInsets(top: 20, leading: 30, bottom: 20, trailing: 30))
+                        .background(Color.secondary.colorInvert())
+                        .cornerRadius(15)
+                        ```
+                    }
+                    @Page(id: "done", title: "") {
+                        Great! Now you have a way to mark an image as a favorite. Next, you’ll show all of your favorited images in the `GridView`.
+                    }
+                }
+                @Task(type: experiment, title: "Show your favorites", id: "gridViewFavorites", file: GridView.swift) {
+                    Display a heart image over your favorited images. 
+                    
+                    @Page(id: "showFavoritesInGrid", title: "") {
+                        To show your favorites in `GridView`, you’ll overlay an image of a heart over your favorite images. 
+                        
+                        Give this a try on your own, using the following hints if needed. 
+                    }
+                    @Page(id: "gridView", title: "") {
+                        In `GridView`, each image is a `NavigationLink` with a [destination](glossary://destination%20view) of `DetailView` and a [label](glossary://label) of a `Rectangle` view overlaid with a `GridItemView`. 
+                        
+                        You can overlay yet another view on top of the `Rectangle` view by adding another `.overlay` modifier below the first. Using `.bottomLeading` for the `alignment` argument aligns the images at the bottom leading corner of the `Rectangle`.
+                        
+                        ```
+                        .overlay(alignment: .bottomLeading) {
+                            //#-learning-code-snippet(checkIsFavorite)
+                        }
+                        ```
+                    }
+                    @Page(id: "checkIsFavorite", title: "") {
+                         You can use some conditional code to see whether this image is a favorite. 
+                         
+                         If the image is a favorite, show a heart image over the bottom leading corner of the `Rectangle` view. 
+                        
+                        ```
+                        if item.isFavorite {
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.3), radius: 5)
+                                .font(.callout)
+                                .offset(x: 4, y: -4)
+                        }
+                        ```
+                    }
+                    @Page(id: "checkBehavior", title: "") {
+                        Now, try favoriting some images and see how the `GridView` changes. Keep tweaking your implementation until it looks exactly as you want it.
+                    }
+                }
+            }
+        }
+    }
+}

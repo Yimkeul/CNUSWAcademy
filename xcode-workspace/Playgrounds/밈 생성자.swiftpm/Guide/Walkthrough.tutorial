@@ -1,0 +1,666 @@
+@GuideBook(title: "Meme Creator", icon: title.png, background: titleBackground.png, firstFile: MemeCreatorApp.swift) {
+    @WelcomeMessage(title: "Meme Creator") {
+        In this sample, you’ll learn how to fetch data from the internet to create panda memes.
+    }
+    @Guide {
+        @Step(title: "Meme Creator") {
+            @ContentAndMedia {
+                ![](intro.png)  
+
+                Welcome to the Meme Creator app, where you’ll learn how to fetch data from the internet to create panda memes.
+                
+                To create a meme, you’ll load some images from a URL, which could take some time depending on the speed of your internet connection to the server. You’ll use an [asynchronous](glossary://asynchronous%20process) request so that your app can keep doing other things in the background, like responding to user actions, while waiting for the images to load into the UI.
+                
+                In this walkthrough, you’ll learn how asynchronous data fetching works, and how to use it when retrieving panda images and their corresponding data in JSON format.
+                
+                @GuideButton(type: walkthrough, title: "Start Walkthrough", description: "AX description for button")
+            }
+        
+            @TaskGroup(title: "Modeling and fetching data") {
+                
+                @Task(type: walkthrough, title: "Create the Panda model", id: "pandaModel", file: Panda.swift) {
+                    Learn how to model structured JSON data from a data source as a Swift structure.
+
+                    @Page(id: "2.pandaModel", title: "") {
+                        This is the `Panda` model object. It’s structured to mirror the JSON data returned from a specific web URL.
+                        
+                        Tap this [URL](http://playgrounds-cdn.apple.com/assets/pandaData.json) to view the JSON data source on a web browser.
+                    }
+                    @Page(id: "2.pandaProperties", title: "") {
+                        Each panda contains a text `description` as well as an `imageUrl`, which points to a panda image. This is the data you’ll use to download a panda image.
+                    }
+                    @Page(id: "2.pandaCollection", title: "") {
+                        A `PandaCollection` consists of an [array](glossary://array) of `Panda` model objects. This mirrors the format of the JSON data, which enables you to easily [decode](glossary://decode) URLs and descriptive text from the JSON data into a `PandaCollection` instance.
+                    }
+                }
+                @Task(type: walkthrough, title: "Fetch Panda data", id: "pandaCollectionFetcher", file: PandaCollectionFetcher.swift) {
+                    To fetch these images and their metadata, you’ll use an [observable object](glossary://observable%20object) that fetches data [asynchronously](glossary://asynchronous%20process).
+                    
+                    @Page(id: "3.pandaCollectionFetcher", title: "") {
+                        The `PandaCollectionFetcher` class handles data fetching in your app. It’s an observable object, which allows it to publish changes to its values to all UI elements that [observe](glossary://observer) them. In this case, you’ll have an image view that’s waiting for new `Panda` data so it can update its image and description.
+                    }
+                    @Page(id: "3.publishedValues", title: "") {
+                        There are two [published values](glossary://published%20value): `imageData` — a `PandaCollection` that you populate with JSON data, and `currentPanda` — a `Panda` model object that you display in the app’s UI.
+                    }
+                    @Page(id: "3.asyncFunc", title: "") {
+                        The `fetchData` function retrieves the JSON data. Notice that it’s marked as `async` to indicate that the function runs asynchronously. Because it might take a little time to fetch the data from the server, an `async` function pauses until the data returns before fetching the next chunk of data. Meantime, your app’s code continues to run in the background. If you didn’t make `fetchData` asynchronous, the app might experience some lag while it loads images individually.
+                    }
+                    @Page(id: "3.throws", title: "") {                        
+                        The `fetchData` function is also marked with the `throws` keyword that tells you the function could throw an error when you call it. In `MemeCreator`, the code ignores any thrown errors by calling `fetchData` using `try?`.
+                    }
+                    @Page(id: "3.validURL", title: "") {
+                        Inside `fetchData`, check to see if you have a valid URL.
+                    }
+                    @Page(id: "3.urlSession", title: "") {
+                        Call another `async` function — `URLSession.shared.data(for:)` — which passes in a URL request using the URL you’ve defined. By marking this call with `await`, you indicate that the function should pause as it waits for a response from the URL request.
+                    }
+                    @Page(id: "3.response", title: "") {
+                        After your data returns, you first check the response to make sure it came from an HTTP server as expected.
+                    }
+                    @Page(id: "3.statusCode", title: "") {
+                        Now that you have a valid response, check its HTTP status code. Your code throws a `failedRequest` error if the status code isn’t equal to `200`, indicating a successful request.
+                    }
+                    @Page(id: "3.decodingData", title: "") {
+                        Finally, [decode](glossary://decode) the JSON data and assign it to the published variable, `imageData`. Now you have all of the data you need to create panda memes.
+                    }
+                }
+                @Task(type: walkthrough, title: "Share app data", id: "dataFetcherApp", file: MemeCreatorApp.swift) {
+                    Explore how the app makes its fetched data available to the entire [view hierarchy](glossary://view%20hierarchy).
+                    
+                    @Page(id: "1.pandaCollectionFetcher", title: "") {
+                        To fetch its data, the app uses an [observable object](glossary://observable%20object), `PandaCollectionFetcher`. This is where all of the data fetching occurs. 
+                    }
+                    @Page(id: "1.environmentObject", title: "") {
+                        To share its data, `MemeCreator` passes in `PandaCollectionFetcher` as an [environment object](glossary://environment%20object), making it available to all of the [child views](glossary://child%20view) of `MemeCreator`. An environment object must also be an observable object, which enables all views [observing](glossary://observer) its data to update whenever that data changes. 
+                    }
+                }
+            }
+                
+            @TaskGroup(title: "Coping with the unexpected") {
+                
+                Anticipate what might go wrong while fetching or decoding data, and provide helpful error information when it does.
+                
+                @Task(type: experiment, title: "Display an error message", id: "CatchingErrors", file: MemeCreator.swift) {
+                    Display error messages that occur while fetching data.
+                    
+                    @Page(id: "", title: "") {
+                        If something goes wrong while fetching data from a server, it’s helpful to let people know what went wrong. You might even make a suggestion for how to fix it.
+                    }
+                    @Page(id: "5.asyncDataLoading", title: "") {
+                        You’ll recall that the `fetchData()` method `throws` when it encounters an error. However, by calling it with `try?` you are just ignoring any thrown errors, leaving people scratching their heads wondering what went wrong.
+                    }
+                    @Page(id: "memeCreator.errorMessage", title: "") {
+                        Help them keep their hair by providing a message that they’ll see if an error occurs.
+                    
+                        Create a [state property](glossary://state%20property) for the error message:
+                        
+                        ```
+                        @State private var errorMessage = ""
+                        ```
+                    }
+                    @Page(id: "memeCreator.displayErrorMessage", title: "") {
+                        Display the error message as the last item in your view’s `VStack`:
+                        
+                        ```
+                        if !errorMessage.isEmpty {
+                            Text(errorMessage)
+                        }
+                        ```
+                    }
+                    @Page(id: "5.asyncDataLoading", title: "") {
+                        Catch any error and update the message if an error occurs:
+
+                        1. Replace `try?` with `try` — no more ignoring errors!
+                        2. Wrap the `try fetchData()` call in a `do`-`catch` statement.
+                        3. Update the error message if an error is thrown.
+                        
+                        ```
+                        do {
+                            try await fetcher.fetchData()
+                        } catch {
+                            errorMessage = error.localizedDescription
+                        }
+                        ```
+                    }
+                    @Page(id: "", title: "") {
+                        All that remains is to see if this works; but for that, you have to make something go wrong!
+                    }
+                }
+                
+                @Task(type: experiment, title: "Simulate an error", id: "SimulatingErrors", file: PandaCollectionFetcher.swift) {
+                    Simulate potential errors and find out how your code handles them.
+                    
+                    @Page(id: "", title: "") {
+                        It’s often a good idea to simulate errors that might occur and check that your code handles them gracefully. Here are a few ways to do this for fetching data from a server:
+                    }
+                    @Page(id: "3.urlString", title: "") {
+                        Try changing the URL so it has a nonexistent subdomain. When the App Preview updates, see if the app displays an error message.
+                        
+                        ```
+                        let urlString = "http://playgrounds-cdn-NON-EXISTENT.apple.com/assets/pandaData.json"
+                        ```
+                    }
+                    @Page(id: "3.urlString", title: "") {
+                        Try changing the URL so it requests a nonexistent file, and wait for the App Preview to update:
+                        
+                        ```
+                        let urlString = "http://playgrounds-cdn.apple.com/assets/NON-EXISTENT.json"
+                        ```
+                    }
+                    @Page(id: "3.urlString", title: "") {
+                        Finally, don’t forget to change the URL back to its correct value.
+                        
+                        ```
+                        let urlString = "http://playgrounds-cdn.apple.com/assets/pandaData.json"
+                        ```
+                    }
+                }
+                
+                @Task(type: experiment, title: "Handle errors while fetching data", id: "HandlingErrorsFetching", file: PandaCollectionFetcher.swift) {
+                    Provide helpful information when an error occurs while fetching data.
+                    
+                    @Page(id: "", title: "") {
+                        When requesting data from a web server, a few things could go wrong:
+                        
+                        * The server might not be reachable, or take too long to handle your request
+                        * The server may not have what you asked for
+                        * Your request may return data in a form that you didn’t expect
+                        
+                        It’s good to remember this, and to think about how your code would handle such scenarios.
+                    }
+                    @Page(id: "3.asyncFunc", title: "") {
+                       In your `fetchData()` method, the code requests data from the server, checks that it got a successful response, and then [decodes](glossary://decode) the data. Any of these steps could fail, resulting in `fetchData()` throwing an error.
+                    }
+                    @Page(id: "3.FetchError", title: "") {
+                        You define custom errors for `fetchData()` in the `FetchError` [enumeration](glossary://enumeration).
+                        
+                        You can attach parameters and a description to a custom error. Whenever people encounter the error, they’ll have additional detail to help figure out what happened.
+                    }
+                    @Page(id: "3.FetchError", title: "") {
+                        For example, when you receive an unsuccessful response you can add the status code to the `failedRequest` error.
+                       
+                       Change the `failedRequest` case to include the status code:
+                       
+                       ```
+                       case failedRequest(status: Int)
+                       ```
+                    }
+                    @Page(id: "3.FetchError", title: "" isAddable: false) {
+                        By having `FetchError` conform to the [LocalizedError](doc://com.apple.documentation/documentation/foundation/localizederror) protocol, you can provide a description for each error.
+                        
+                        Change `FetchError` so that it conforms to `LocalizedError`:
+                        
+                        ```
+                        enum FetchError: Error, LocalizedError
+                        ```
+                    }
+                    @Page(id: "pandaCollectionFetcher.errorDescription", title: "") {
+                        Implement part of the `LocalizedError` protocol, by adding an `errorDescription` property to `FetchError`. This provides a readable description for each custom error.
+                        
+                        ```
+                        /*#-code-walkthrough(3.errorDescription)*/
+                        public var errorDescription: String? {
+                            switch self {
+                            case .badResponse:
+                                return "The server returned an unrecognized response."
+                            case .failedRequest(let status):
+                                return "The request failed with status code: \(status)"
+                            //#-learning-code-snippet(pandaCollectionFetcher.badJSONErrorDescription)
+                            }
+                        }
+                        /*#-code-walkthrough(3.errorDescription)*/
+                        ```
+                    }
+                    @Page(id: "3.statusCode", title: "" isAddable: false) {
+                       Now you can the provide the status code when you throw `failedRequest(status:)` after receiving an unsuccessful response.
+                       
+                       Add the `status` parameter and give it a value of `response.statusCode`:
+                       
+                       ```
+                       throw FetchError.failedRequest(status: response.statusCode)
+                       ```
+                    }
+                    @Page(id: "3.urlString", title: "") {
+                       Check to see if the server returns a status code by changing the URL so that it requests [a nonexistent file](http://playgrounds-cdn.apple.com/assets/NON-EXISTENT.json), then wait for the App Preview to update:
+                       
+                       ```
+                       let urlString = "http://playgrounds-cdn.apple.com/assets/NON-EXISTENT.json"
+                       ```
+                    }
+                    @Page(id: "", title: "") {
+                        And, as before, don’t forget to change the URL back to its correct value:
+                        
+                        ```
+                        let urlString = "http://playgrounds-cdn.apple.com/assets/pandaData.json"
+                        ```
+                    }
+                }
+                @Task(type: experiment, title: "Handle errors while decoding data", id: "HandlingErrorsDecoding", file: PandaCollectionFetcher.swift) {
+                    Provide helpful information when an error occurs while decoding data.
+                    
+                    @Page(id: "", title: "") {
+                        Even if your request is successful and you receive JSON data back from the web server, things can still go wrong:
+                        
+                        * The data may not be in a valid JSON format
+                        * Even if it is valid JSON data, it might not be what your decoder expects
+                        
+                        It’s good to anticipate such issues and provide information to help debug a problem.
+                    }
+                    @Page(id: "pandaCollectionFetcher.badJSON", title: "") {
+                        Add a specific `badJSON` case to the `FetchError` [enumeration](glossary://enumeration) to distinguish this particular error:
+                        
+                        ```
+                        case badJSON(error: Error)
+                        ```
+                    }
+                    @Page(id: "pandaCollectionFetcher.badJSONErrorDescription", title: "") {
+                        Remember to add an error description for the `badJSON` case inside the `errorDescription` property of `FetchError`:
+                        
+                        ```
+                        case .badJSON(let error):
+                            return "An error occurred while decoding JSON: \(error)"
+                        ```
+                    }
+                    @Page(id: "3.decodingData", title: "") {
+                        Wrap the call to the `JSONDecoder` with its own `do`-`catch` statement, so you can catch any decoding error here and throw it again as a `badJSON` error:
+                        
+                        ```
+                        do {
+                            imageData = try JSONDecoder().decode(PandaCollection.self, from: data)
+                        } catch {
+                            throw FetchError.badJSON(error: error)
+                        }
+                        ```
+                    }
+                    @Page(id: "3.urlString", title: "") {
+                       Check to see if this works by changing the URL so it requests [this JSON file](http://playgrounds-cdn.apple.com/assets/pandaBad.json), in which one image is missing its description, then wait for the App Preview to update:
+                       
+                       ```
+                       let urlString = "http://playgrounds-cdn.apple.com/assets/pandaBad.json"
+                       ```
+                    }
+                    @Page(id: "", title: "") {
+                        And, as always, don’t forget to change the URL back to its correct value:
+                        
+                        ```
+                        let urlString = "http://playgrounds-cdn.apple.com/assets/pandaData.json"
+                        ```
+                    }
+                }
+            }
+            
+            @TaskGroup(title: "Building Meme Creator") {
+        
+                @Task(type: walkthrough, title: "Create asynchronous images", id: "loadableImage", file: LoadableImage.swift) {
+                    Investigate how to use a URL to load images asynchronously. 
+                    
+                    @Page(id: "4.loadableImage", title: "") {
+                        When you have the JSON data, you can use it to load panda images in the app. To accomplish this, compose your `LoadableImage` view from [AsyncImage](doc://com.apple.documentation/documentation/swiftui/asyncimage), a view that loads an image asynchronously.
+                    }
+                    @Page(id: "4.imageMetaData", title: "") {
+                        To create an image, `LoadableImage` needs data about the `Panda` it’s loading. The metadata supplied here includes the image URL and the description.
+                    }
+                    @Page(id: "4.asyncImage", title: "") {
+                        Inside the view `body`, create an `AsyncImage` and pass in the `imageUrl` to load the panda image. An `AsyncImage` view loads asynchronously so you’ll need to show something in its place while the image loads, and show something else if image loading fails. You’ll handle all of this logic in the following `if` statement.
+                    }
+                    @Page(id: "4.phase", title: "") {
+                        When you create an instance of `AsyncImage`, SwiftUI provides you with [phase data](doc://com.apple.documentation/documentation/swiftui/asyncimagephase), which updates you on the state of image loading. For example, `phase.error` provides you with errors that occur, while `phase.image` provides an image, if available. You can use the phase data to show the appropriate UI based on the phase state.
+                    }
+                    @Page(id: "4.phaseImage", title: "") {
+                        Check to see if an image is available. If there is, great — this is the panda image you’ll display using the description as the accessibility text.
+                    }
+                    @Page(id: "4.phaseError", title: "") {
+                        Check to see if any errors occurred while loading the image. If so, you can provide a view that tells the user something went wrong.
+                    }
+                    @Page(id: "4.progressView", title: "") {
+                        If you haven’t received an image and you don’t have an error, that means the image is loading. To let people know that the image is loading in the app, use `ProgressView` to display an animation.
+                    }
+                }
+                @Task(type: walkthrough, title: "Make the Meme Creator", id: "memeCreator", file: MemeCreator.swift) {
+                    You’ll use the data from your app to create a meme-generating UI.
+                    
+                    @Page(id: "5.memeCreator", title: "") {
+                        `MemeCreator` is where you bring everything together to make panda memes. As the [top-level view](glossary://top-level%20view) of your app, this is where the app displays the panda image, and provides the tools for adding and editing the meme text.
+                    }
+                    @Page(id: "5.fetcher", title: "") {
+                        In `MemeCreatorApp`, you passed in a `PandaCollectionFetcher` as an [environment object](glossary://environment%20object) to the top-level view. Here, you access that environment object by defining a `fetcher` variable with the `@EnvironmentObject` [property wrapper](glossary://property%20wrapper).
+                    }
+                    @Page(id: "5.task", title: "") {
+                        Before you start loading panda images, the `fetcher` needs to retrieve the JSON data. The `.task` modifier defines a task to complete when the view first appears. This is where you’ll call `fetcher.fetchData()` to retrieve the JSON data.
+                    }
+                    @Page(id: "5.asyncDataLoading", title: "") {
+                        In the [closure](glossary://closure), you’ll insert `try? await` before calling `fetcher.fetchData()`. These words correspond to how you defined `fetchData()` with `async throws`. Because the function is asynchronous, `await` means that the app waits for the results of the `async` function to return, and `try` followed by a question mark (`try?`) means the app tries calling the function and ignores any error that it throws. 
+                    }
+                    @Page(id: "5.loadableImage", title: "") {
+                        In the UI for this view, you’ll use `LoadableImage` to asynchronously load an image based on the data fetcher’s `currentPanda`. Even if your JSON data hasn’t loaded yet, the app provides a default `currentPanda` to load as the first image.
+                    }
+                    @Page(id: "5.overlay", title: "") {
+                        The image also has a text overlay, which you can add as a [modifier](glossary://modifier). This overlay shows the meme text. The text field uses three state variables, `memeText`, `textSize`, and `textColor` to dynamically change the data of the text field in response to user editing actions. The text field can become focused by passing the `@FocusState` variable into the `.focused` modifier.
+                    }
+                    @Page(id: "5.randomImageButton", title: "") {
+                        To change the image, you can tap a button that retrieves a random `Panda` from the `PandaCollection` and sets it as the `currentPanda`. Because `currentPanda` is a [published value](glossary://published%20value), the `LoadableImage` view automatically updates to use the latest `currentPanda` data whenever it changes.
+                    }
+                    @Page(id: "5.focusButton", title: "") {
+                        To add text, use a button that changes the [focus state](glossary://focus%20state) of the text field to `true`. This automatically inserts the cursor in the text field so you can add text.
+                    }
+                    @Page(id: "5.sizeAndColorPickers", title: "") {
+                        Finally, you can modify the state variables (`textSize` and `textColor`) using the slider and color picker at the bottom of the UI. These controls modify the values of those state variables to automatically update the meme text’s appearance.
+                    }
+                }
+            }
+            
+            @TaskGroup(title: "Mapping panda places") {
+                
+                Use the skills you learned in Meme Creator to build a map of panda places using geolocation data fetched from a server.
+                
+                @Task(type: experiment, title: "Model a panda place", id: "pandaPlace", file: PandaPlace.swift) {
+                    
+                    Create a model structure to match the JSON data on the server.
+                    
+                    @Page(id: "", title: "") {
+                        Now that you’ve seen how to model, download, and use data from a JSON source, try doing this yourself using a different data source — a list of places around the world where you can find pandas and display them on a map.
+                    }
+                    
+                    @Page(id: "", title: "" isAddable: "false") {
+                        Start by fetching the data of panda places from [this JSON file](http://playgrounds-cdn.apple.com/assets/pandaPlaces.json), part of which is shown below. Look carefully at its structure and see if you can work out how to [model](glossary://data%20model) this in your code.
+                        
+                        ```
+                        [
+                            {
+                                "id": 1,
+                                "name": "Beijing Zoo",
+                                "address": "Beijing, China",
+                                "latitude": 39.938611,
+                                "longitude": 116.333333,
+                                "image": "pandaHungry"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Chiang Mai Zoo",
+                                "address": "Chiang Mai, Thailand",
+                                "latitude": 18.809,
+                                "longitude": 98.947,
+                                "image": "pandaLeaning"
+                            }
+                        ]
+                        ```
+                    }
+                    @Page(id: "", title: "" isAddable: "false") {
+                        The JSON data is as an array of panda places, each with a unique `id` and several properties such as the places’s `name`, `address`, and its `latitude` and `longitude` coordinates.
+                        
+                        You’ll create a `PandaPlace` structure to represent each place, modeling the data in your code as an array of `PandaPlace` instances.
+                        ```
+                        [
+                            {
+                                "id": 1,
+                                "name": "Beijing Zoo",
+                                "address": "Beijing, China",
+                                "latitude": 39.938611,
+                                "longitude": 116.333333,
+                                "image": "pandaHungry"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Chiang Mai Zoo",
+                                "address": "Chiang Mai, Thailand",
+                                "latitude": 18.809,
+                                "longitude": 98.947,
+                                "image": "pandaLeaning"
+                            }
+                        ]
+                        ```
+                    }
+                    @Page(id: "pandaPlace.PandaPlace", title: "" isAddable: "false") {
+                        The `PandaPlace` structure awaits you in skeleton form.
+                        
+                        Notice that it’s [Identifiable](doc://com.apple.documentation/documentation/swift/identifiable) with an `id` property that uniquely identifies each place. SwiftUI needs this identifier when laying out items on a map or in a grid.
+                        
+                        `PandaPlace` is also [Codable](doc://com.apple.documentation/documentation/swift/codable), which is really important here because that means that a [decoder](glossary://decode) can be used to read JSON data into the structure, and an [encoder](glossary://encode) can be used to write the data in the structure to JSON.
+                    }
+                    @Page(id: "pandaPlace.id", title: "" isAddable: "false") {
+                        The `id` property is already present. See if you can add the rest of the properties to match what’s in the JSON structure shown below. Pay careful attention to the [type](glossary://type) of each property. 
+                        
+                        Take `name` for example: its value is in quotes — a clue that it’s a string, so add a property called `name` of type `String`.
+                        
+                        ```
+                        "id": 1,
+                        "name": "Beijing Zoo",
+                        "address": "Beijing, China",
+                        "latitude": 39.938611,
+                        "longitude": 116.333333,
+                        "image": "pandaHungry"
+                        ```
+                    }
+                    @Page(id: "pandaPlace.properties", title: "" isHidden: true) {
+                        You now have properties for each item of data:
+                        
+                        ```
+                        var name: String
+                        var address: String
+                        var latitude: Double
+                        var longitude: Double
+                        var image: String
+                        ```
+                    }
+                    @Page(id: "pandaPlace.location", title: "") {
+                        Add a [computed property](glossary://computed%20property) to provide a [Core Location](https://developer.apple.com/documentation/corelocation/) coordinate for the place based on its latitude and longitude. You’ll use this data to plot its location on the map:
+                        ```
+                        var location: CLLocationCoordinate2D {
+                            CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                        }
+                        ```
+                    }
+                    @Page(id: "pandaPlace.imageURL", title: "") {
+                        Add another computed property to take the `image` name and convert it into a complete URL that you’ll use to load the image:
+                        ```
+                        var imageURL: URL? {
+                            URL(string: "https://playgrounds-cdn.apple.com/assets/pandas/\(image).jpg")
+                        }
+                        ```
+                    }
+                    @Page(id: "", title: "") {
+                        Your `PandaPlace` structure is now ready to accept data decoded from the JSON data.
+                    }
+                }
+                    
+                @Task(type: experiment, title: "Fetch the panda places", id: "pandaPlacesFetcher", file: PandaPlacesFetcher.swift) {
+                    
+                    Set up the fetcher to download an array of panda places. 
+                    
+                    @Page(id: "pandaPlacesFetcher", title: "" isAddable: "false") {
+                        Now that you have a [model](glossary://data%20model) object (`PandaPlace`) that matches each item in the JSON data, you need to set up the `PandaPlacesFetcher` observable object to fetch the JSON data from the server and populate an array of `PandaPlace` instances.
+                    }
+                    @Page(id: "pandaPlacesFetcher.places", title: "") {
+                        Add the places array as a [published property](glossary://published%20value):
+                        ```
+                        @Published var places = [PandaPlace]()
+                        ```
+                    }
+                    @Page(id: "pandaPlacesFetcher.url", title: "") {
+                        This is the URL for the JSON data that the fetcher requests.
+                    }
+                    @Page(id: "pandaPlacesFetcher.fetchData", title: "") {
+                        The `fetchData()` method uses the shared [URLSession](doc://com.apple.documentation/documentation/foundation/urlsession) to make a request for the data from the URL. 
+                        
+                        Notice that it’s [asynchronous](glossary://asynchronous%20process), which means that it runs concurrently and your code must `await` its completion.
+                    }
+                    @Page(id: "pandaPlacesFetcher.decode", title: "") {
+                        After receiving the data, you [decode](glossary://decode) it using a [JSONDecoder](doc://com.apple.documentation/documentation/foundation/jsondecoder). The decoder accepts two parameters:
+                        
+                        * The type of object that you want to create from the data — in this case, an array of panda places: `[PandaPlace].self`. Note that this type must be [Codable](doc://com.apple.documentation/documentation/swift/codable).
+                        * The `data` that you want to decode.
+                        
+                        Add the decoding code inside a `do`-`catch` statement to catch any decoding errors:
+                        ```
+                        do {
+                            let decodedPlaces = try JSONDecoder().decode([PandaPlace].self, from: data)
+                            //#-learning-code-snippet(pandaPlacesFetcher.task)
+                        } catch {
+                            throw FetchError.badJSON(error: error)
+                        }
+                        ```
+                    }
+                    @Page(id: "pandaPlacesFetcher.task", title: "") {
+                        And finally, if the data decoded successfully, update the `places` array. 
+                        
+                        Tip: Any change to the published property `places` may in turn update your UI, and so it’s good practice to update `places` on the main actor:
+                        ```
+                        await MainActor.run {
+                            places = decodedPlaces
+                        }
+                        ```
+                    }
+                }
+                    
+                @Task(type: experiment, title: "View panda places", id: "pandaPlacesView", file: PandaPlacesView.swift) {
+                    
+                    View panda places on a map of the world.
+                    
+                    @Page(id: "pandaPlacesView", title: "" isAddable: "false") {
+                        You’ll display a map in the `PandaPlacesView` and add an annotation to it for the location of each panda place. You can then tap or click on any panda place to see more information about it.
+                    }
+                    @Page(id: "pandaPlacesView.fetcher", title: "") {
+                        The data for this view comes from `fetcher` — a `PandaPlacesFetcher` instance passed into your view as an environment object.
+                    }
+                    @Page(id: "pandaPlacesView.mapkit", title: "") {
+                        To display a [map](doc://com.apple.documentation/documentation/mapkit/map), you’ll need to [import](glossary://import) the [MapKit](doc://com.apple.documentation/documentation/mapkit) framework in your app:
+                        ```
+                        import MapKit
+                        ```
+                    }
+                    @Page(id: "pandaPlacesView.region", title: "") {
+                        You need to define a geographic region that your [map](doc://com.apple.documentation/documentation/mapkit/map) initially displays when your view loads. Then you’ll be able to scroll around or zoom in on any location you like.
+                        ```
+                        @State private var region = MKCoordinateRegion(
+                            center: CLLocationCoordinate2D(latitude: 10, longitude: 66),
+                            span: MKCoordinateSpan(latitudeDelta: 180, longitudeDelta: 180)
+                        )
+                        ```
+                    }
+                    @Page(id: "pandaPlacesView.map", title: "") {
+                        Now add the [map](doc://com.apple.documentation/documentation/mapkit/map), and annotate it with a button for each panda place:
+                        ```
+                        Map(coordinateRegion: $region, annotationItems: fetcher.places) { place in
+                            MapAnnotation(coordinate: place.location) {
+                                PlaceButton(place: place)
+                            }
+                        }
+                        ```
+                    }
+                    @Page(id: "pandaPlacesView.map", title: "") {
+                        Switch to the Preview in the canvas — you'll see the map, but no places have appeared yet. There’s one more critical thing you have to do. 
+                        
+                        Can you guess what that is?
+                    }
+                    @Page(id: "pandaPlacesView.task", title: "") {
+                        Correct! You have to get your `fetcher` to do its fetching!
+                        
+                        Add a `task` modifier to have the view fetch the data when it first loads:
+                        ```
+                        .task {
+                            do {
+                                try await fetcher.fetchData()
+                            } catch {
+                                print(error)
+                            }
+                        }
+                        ```
+                    }
+                    @Page(id: "", title: "") {
+                        You can now see all of the panda places displayed on the map.
+                        
+                        Next, you’ll add the `map` view to your app.
+                    }
+                }
+                
+                @Task(type: experiment, title: "Update your app to show panda places", id: "pandaPlacesMemeCreatorApp", file: MemeCreatorApp.swift) {
+                    
+                    Modify your app so it displays panda places instead of Meme Creator. 
+                    
+                    @Page(id: "", title: "") {
+                        You can now change the code in `MemeCreatorApp` to display the `PandaPlacesView`.
+                    }
+                    @Page(id: "memeCreatorApp.placesFetcher", title: "") {
+                        First, you’ll need a `PandaPlacesFetcher` object to use in your app.
+                        
+                        Add the `placesFetcher` [state object](glossary://state%20object) to your app.
+                        
+                        ```
+                        @StateObject private var placesFetcher = PandaPlacesFetcher()
+                        ```
+                    }
+                    @Page(id: "1.environmentObject", title: isAddable: "false") {
+                        Comment out the `MemeCreator` view and replace it with a `PandaPlacesView`, giving it `placesFetcher` as its environment object:
+                        
+                        ```
+                        // MemeCreator()
+                        //    .environmentObject(fetcher)
+                        PandaPlacesView()
+                            .environmentObject(placesFetcher)
+                        ```
+                    }
+                    @Page(id: "1.environmentObject", title: "") {
+                        The App Preview in the canvas now displays panda places scattered around the world.
+                        
+                        Next, make the places interactive.
+                    }
+                }
+                    
+                @Task(type: experiment, title: "Add a popover view for a place", id: "placeButton", file: PlaceButton.swift) {
+                    
+                    Add a view that pops up when you tap or click on a panda place.
+                    
+                    @Page(id: "placeButton", title: "" isAddable: "false") {
+                        Up to now, the `PlaceButton` that you add to the map just displays a paw print, and it doesn’t do anything when you tap or click it.
+                        
+                        But you really want it to display a popover view with a panda photo and the name of the place.
+                    }
+                    @Page(id: "placeButton.isShowingPopover", title: "") {
+                        Add a [state property](glossary://state%20property) used to determine when to show the popover.
+                        
+                        ```
+                        @State private var isShowingPopover = false
+                        ```
+                    }
+                    @Page(id: "placeButton.isShowingPopoverTrue", title: "") {
+                        Add code in the button’s action handler to show the popover:
+                        
+                        ```
+                        isShowingPopover = true
+                        ```
+                    }
+                    @Page(id: "placeButton.presentPopover", title: "") {
+                        Use a `popover` modifier to display a `PlacePopoverView` when you tap or click the button.
+                        ```
+                        .popover(isPresented: $isShowingPopover) {
+                            PlacePopoverView(name: place.name, address: place.address, url: place.imageURL, size: $popoverSize)
+                                //#-learning-code-snippet(placeButton.presentationDetents)
+                        }
+                        ```
+                    }
+                    @Page(id: "placeButton.fontAnimation", title: "") {
+                        If the place on the map is selected, highlight it by making the button slightly bigger and animating the change:
+                        
+                        ```
+                        .font(isShowingPopover ? .title : .body)
+                        .animation(.easeInOut(duration: 0.2), value: isShowingPopover)  
+                        ```
+                    }
+                    @Page(id: "placeButton.presentationDetents", title: "") {
+                        Notice that when the app window is narrow, the popover is presented as a sheet that slides up from the bottom of the view.
+
+                        Use a [presentationDetents(_:)](doc://com.apple.documentation/documentation/deviceactivity/deviceactivityreport/presentationdetents(_:)) modifier to ensure that the sheet is exactly the right height for the popover:
+                        ```
+                        .presentationDetents([.height(popoverSize.height)])
+                        ```
+                    }
+                    @Page(id: "", title: "") {
+                        Try it out!
+                        
+                        In your App Preview, tap or click any of the places on the map. See if you can find the very tiny Isla Panda, which, sadly, has no pandas.
+                    }
+                }
+            }
+        }
+    }
+}

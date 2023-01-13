@@ -1,0 +1,356 @@
+@GuideBook(title: "Write Your Own Story", icon: title.png, background: titleBackground.png, firstFile: StoryApp.swift) {
+    @WelcomeMessage(title: "Write Your Own Story") {
+        Today you are the author, and you're going to write your own story. Will there be drama? Will there be magic? Robots? Pirates? You decide.
+    }
+    @Guide {
+        @Step(title: "Write Your Own Story") {
+            @ContentAndMedia {
+                ![](intro.png)
+                
+                In this sample, you get the opportunity to write two different stories. The first is a linear short story, like one you might find in a book at the library. You'll write three chapters for this short story, and after changing up the cover and adding a dedication, you'll have your own electronic book. For the second story, you create different paths that take your reader on different journeys, depending on their choices. Which kind of story inspires the author in you? 
+                
+                It's time to harness your creative writing skills.
+                
+                @GuideButton(type: walkthrough, title: "Start Walkthrough", description: "AX description for button")
+            }
+            @TaskGroup(title: "Story challenges") {
+                @Task(type: experiment, title: "Create your own story", id: "writeTheStory", file: FirstChapter.swift) {
+                    Create your own short story based on the image and story suggestions in this challenge.
+                    @Page(id: "1.writeTheStory", title: "") {
+                       Get out that metaphorical pen and get ready to write! Your first challenge is to write about what's going on in the image.
+                    }
+                    @Page(id: "2a.writeTheStory", title: "") {
+                        The first chapter of your short story is an important one. You want to catch your reader's attention right from the start to set the scene.
+                      
+                      To add the title of your chapter, edit `Title("Your Title")`.
+                      
+                    }
+                       @Page(id: "2b.writeTheStory", title: "") {
+                       Now that you have a title, it's time to start writing! If you don't know where to begin, add this story suggestions to get your chapter going. 
+                       
+                       Add your text to `myStory` below the `TitlePage`:
+                       
+                       "The space voyagers were so close to landing on an undiscovered planet when they realized they were headed straight for a space whale …" 
+                    }
+                    @Page(id: "3.writeTheStory", title: "") {
+                        To see what you've written so far, swipe to the left on the view preview.
+                    }
+                    @Page(id: "4.writeTheStory", title: "") {
+                        Just like in a physical book, you can only use a certain number of words on a page. When you get to the end of this page -- or any page -- you can start a new page by adding a `PageBreak()`.
+                        Add this code below the text in `myStory`:
+                        ```
+                        PageBreak()
+                        ```
+                    }
+                    @Page(id: "5.writeTheStory", title: "") {
+                        Now that you’ve set the scene for your story, it’s time to come up with your first plot point. Engage your audience by dropping them right into the action.
+                        
+                       Continue writing your own story or add this plot suggestion below the code you've already written.
+                       
+                       "Alarms were blaring on the ship because they had never encountered a space whale before …"
+
+                    }
+                    @Page(id: "6.writeTheStory", title: "") {
+                        Sometimes stories are more powerful with pictures. Try adding a picture to one of the pages in your chapter.
+                        
+                        Add this code to your `Story` below what you've written in `myStory`: 
+                        ```
+                        Picture(.pirateShip)
+                        ```
+                        If you want to change the image, delete `.pirateShip` and type `.` to see all of the images you can add.
+                       
+                    }
+                    @Page(id: "7.writeTheStory", title: "", isAddable: false) {
+                       If you swipe to the left on the view preview, you can see that the picture appears on a new page. If you want the picture to be on the same page as your text, put your `Picture` and text in a `StoryPage` wrapper to keep them both together.
+                       
+                       Add a `StoryPage` wrapper around your picture and text. You need to add the `StoryPage` inside `myStory`. It should look like this: 
+                       ```
+                       StoryPage {
+                            "📝"
+                            Picture(.pirateShip)
+                       }
+                       ```
+                       You can’t use `PageBreak` in a `StoryPage`, only text and `Picture`.
+
+                    }
+                    @Page(id: "8.writeTheStory", title: "") {
+                        You now have the tools you need to create a story that’s all your own. Use these three code snippets to complete your story.
+                        
+                        Finish writing your chapter, and be sure to leave your reader on a cliffhanger!
+                        ```
+                        PageBreak()
+                        ```
+                        
+                        "Whether magic or luck, they came upon …"
+                        
+                        ```
+                        StoryPage {
+                          "📝"
+                           Picture( .astronautOopsy)
+                        }
+                        ```
+                    }
+                    @Page(id: "9.writeTheStory", title: "") {
+                        As you write your short story, keep swiping to the left on the view preview to see it come to life.
+                        
+                        When you're ready, keep going to write Chapter 2.
+                    }
+                }
+                @Task(type: experiment, title: "Keep the story going", id: "multipage", file: SecondChapter.swift) {
+                    Keep building your book by adding a second chapter.
+                    
+                    @Page(id: "0.multipage", title: "") {
+                        Now that you’re starting a new chapter, change the title for this chapter just like you did in the first one. You can also change the image in `Picture` to one of your own. 
+        
+                        To add your own photo on iPad:
+                        1. Open the left sidebar.
+                        2. Tap the Add File button at the top of the sidebar.
+                        3. Tap Photo to add a photo asset from your Photos app.
+                        4. Give your photo a name.
+                        5. Remove `.elfFairyLand` and type the name of your photo with quotation marks around it. 
+                    }
+                    @Page(id: "1.multipage", title: "") {
+                        Decide what happens next in your story. One suggestion is to develop your main character. Make your audience care about the character and their situation. What moral dilemma are they facing?
+                        
+                        Add your first page of text inside `myStory` below `Chapter`.
+                        
+                        "The families left behind had to decide what to do about the situation …"
+                        
+                    }
+                    @Page(id: "2.multipage", title: "") {
+                        Make your characters come to life by giving them thoughts, feelings, and imperfections. What are their weaknesses? What are their strengths? 
+
+                        Start with one of the following code suggestions, or add your own. You’ll build this chapter the same way you did for your first chapter.
+                        
+                      You can add text,
+                      
+                      "Once they landed, they were in search of one thing …"
+                      
+                      add new pages,
+                      ```
+                      PageBreak()
+                      ```
+                      and add images above or below the text. 
+                      ```
+                      StoryPage {
+                            "📝"
+                            Picture(.treasure)
+                      }
+                      ```                    
+                    }
+                    @Page(id: "3.multipage", title: "") {
+                        Remember to swipe through your book in the app preview to see what you're writing and check that everything is working as you expect.
+                        
+                       Keep writing until you complete Chapter 2.
+                       If you need some inspiration, use this story suggestion:
+
+                       "The creatures gave them hope that one day …"
+                    }
+                    @Page(id: "5.multipage", title: "") {
+                        You're a creative genius! Keep writing and testing your story in the view preview. When you’re ready, move on to write your third and final chapter.
+                    }
+                }
+                @Task(type: experiment, title: "The final chapter", id: "finalStory", file: ThirdChapter.swift) {
+                    Add the final chapter to your book! 
+                    @Page(id: "0.finalStory", title: "") {
+                        Now that you’ve created a multichapter story, it’s time for the ending! Let’s bring the story to a dramatic close. 
+                    }
+                    @Page(id: "1.finalStory", title: "") {
+                        For this last chapter, go ahead and add a new picture if you want, and add the chapter number and title to `TitlePage`.  
+                    }
+                    @Page(id: "2.finalStory", title: "") {
+                       Continue writing your story by combining text, 
+
+                       "None of them could have imagined what they would find …"
+
+                       page breaks,
+                       ```
+                       PageBreak()
+                       ```
+                       and images above or below the text.
+                       ```
+                      StoryPage {
+                        "📝"
+                        Picture(.treasure)
+                      }
+                      ```  
+                    }
+                    @Page(id: "3.finalSTory", title: "") {
+                            For an extra challenge, or if you want to add another chapter, follow the model of the chapter structures to create more chapters and turn your short story into a thrilling novel!
+                    }
+                }
+                @Task(type: experiment, title: "Personalizing the cover page", id: "titlePage", file: MyStoryBook.swift) {
+                        Change the cover page to match the theme of your short story.
+                    @Page(id: "0.titlePage", title: "") {
+                        Now that you've written the chapters for your short story, it's time to give your story a title.
+                            
+                        Change the title from "My Brilliant Story" to whatever you want by adding your title to the `title` variable in the `MyStoryBook` structure.
+                    }
+                    @Page(id: "1.titlePage", title: "") {
+                        Edit the `String` to be your name.
+                    }
+                    @Page(id: "2.titlePage", title: "") {
+                        If you want to change your book's cover image, you can change the value stored in `coverImage`. 
+                        
+                        Delete `.fantasy` and type in `.` to see the cover images you can choose from.  
+                    }
+                }
+                @Task(type: experiment, title: "Adding a dedication", id: "dedication", file: DedicationPage.swift) {
+                        Add a dedication page to your book. 
+                    @Page(id: "0.dedication", title: "", isAddable: false) {
+                        You can write a dedication to thank people who helped you become an author or inspired you along the way. 
+                        
+                        An example of a dedication looks like this: 
+
+                        "Thank you to my best friend for inspiring all of these fun stories through our adventures together."
+                    }
+                    @Page(id: "1.dedication", title: "") {
+                        Remove the `PageBreak()` and add a `Dedication()` to write a small thank you to someone important to you. Think of something like, "I dedicate this book to my teacher, who taught me how to write creatively."
+
+                        ```
+                        Dedication(dedication: "📝")
+                       ```
+                    }
+                    @Page(id: "2.dedication", title: "") {
+                        Now if you go to the app preview by clicking the `MyStoryBook` file and flip past the cover and copyright page, you'll see your dedication!   
+                    }
+                }
+            }
+            @TaskGroup(title: "Choose-your-own-adventure story") {
+                Learn how to create a different kind of story where the reader decides where the story goes based on the choices you provide.  
+                @Task(type: walkthrough, title: "Setting up a story with choices", id: "choices", file: DoorAdventure.swift) {
+                    Learn to configure a choose-your-own-adventure story.
+                    @Page(id: "0.choices", title: "") {
+                        This adventure story is about the two magical doors in the image on the view preview. Tap the arrow next to "Begin Your Story" and explore this choose-your-own-adventure story.
+                    }
+                    @Page(id: "1.choices", title: "") {
+                        Now that you've played with how this story works, keep the creative juices flowing to create your own choose-your-own-adventure story!
+                    }
+                    @Page(id: "3.choices", title: "") {
+                        A choose-your-own-adventure story is similar to a regular story, except you add choices for a reader to decide where the story goes. 
+                        
+                        To be able to link all of your pages together, you need to put all of your text and choices in a `ChoicePage`.
+                    }
+                    @Page(id: "4.choices", title: "") {
+                        Each choice page displays one or more `Choice` elements for the reader to choose from.
+                        
+                        Each `Choice` has a title and a destination for where to go when your reader selects a choice. 
+                    }
+                    @Page(id: "5.choices", title: "") {
+                        The choice destination is an index that’s located in the list of stories. 
+                        
+                        To help you keep track of the destination, look at the comments next to the list of `stories` in `DoorAdventureBook`.
+                    }
+                    @Page(id: "6.choices", title: "") {
+                        Now that you know how to set up a choose-your-own-adventure story, it's time to dive a bit deeper to see how the destinations work.
+                    }
+                }
+                @Task(type: walkthrough, title: "Adding destinations", id: "doorAdventure", file: DoorAdventure.swift) {
+                    Configure new destinations by adding them to your `StoryBook`.
+
+                    @Page(id: "0.doorAdventure", title: "")  {
+                        To make destinations for your choices, you need more `Story` structures. `LargeDoor` is one of the destinations a reader can get to after the first page.
+                    }
+                    @Page(id: "1a.doorAdventure", title: "") {
+                        `SmallDoor` is the other destination a reader can get to after the first page.
+                    }
+                    @Page(id: "1.doorAdventure", title: "") {
+                        After you create a destination page, add it to the `stories` variable so you can use it as a destination.
+                    }
+                    @Page(id: "5.doorAdventure", title: "") {
+                        Keep going to create your own choose-your-own-adventure story. 
+                     }
+                }
+                @Task(type: experiment, title: "Creating your own adventure story ", id: "adventureStory", file: MyAdventureStory.swift) {
+                    It's time to write your choose-your-own-adventure story! 
+                    @Page(id: "1.adventureStory", title: "") {
+                        Now that you understand how the choose-your-own-adventure story is set up, it's time to start writing your own adventure.
+                        Just like in the earlier writing challenges, you can come up with different characters and create the setting and plot that you want. The only difference is that you have to add options for where the story can go.
+                    }
+                    @Page(id: "2.adventureStory", title: "") {
+                        Start by changing the `Picture` and `Title` in `ChoicePage`. You can also remove the text under `Title` and add an introduction to the story. 
+                    }
+                    @Page(id: "3.adventureStory", title: "") {
+                        Now let's start on `PageOne`. Add this suggestion or write your own: 
+
+                        "The astronaut crashed on a strange planet that she'd never seen before …"
+                    }
+                    @Page(id: "4.adventureStory", title: "") {
+                        Add choices to the first page of your story along with the destinations for the first page. You can add as many destinations as you want, but here are two to get you started.
+                        
+                        Add these choices inside `ChoicePage` below the string. Change the `title` values to real choices for where your story can go.
+                        ```
+                        Choice(title: "📝", destination: 2)
+                        Choice(title: "✍️", destination: 3)
+
+                        ```
+                    }
+                    @Page(id: "5.adventureStory", title: "") {
+                       Continue writing your story on `PageTwo` and `PageThree` based on the titles that you gave the choices on `PageOne`.
+                    }
+                    @Page(id: "6.adventureStory", title: "", isAddable: false) {
+                       If you want to add an image to any of your pages, add a `Picture` in `ChoicePage`. It could look like this:
+                       ```
+                       struct PageTwo: Story {
+                           ChoicePage {
+                               Picture(.spaceWhale)
+                                "📝"
+                                
+                           }
+                       }
+                       ```
+                    }
+                    @Page(id: "7.adventureStory", title: "") {
+                        Check that your story works by navigating through your story in the view preview. Make sure that the destination buttons work correctly.
+                    }
+                    @Page(id: "8.adventureStory", title: "") {
+                        You can end your story here, or keep the pattern going and add more pages to your story. 
+                    }
+                }
+                @Task(type: experiment, title: "Creating more choices and pages", id: "codeChoices", file: MyAdventureStory.swift) {
+                    Add more pages to your `Storybook` to create more directions for your story to go.
+                    @Page(id: "1.codeChoices", title: "", isAddable: false) {
+                       If you want to add more choices to `PageTwo` or `PageThree`, you’ll need to add more pages for the choices to link to. Let's add those pages now! 
+                    } 
+                    @Page(id: "2.codeChoices", title: "") {
+                       Below `PageThree`, add a new `Story` structure called `PageFour` that includes a `myStory` variable and a `ChoicePage` element where you can continue the story.
+                       ```
+                       struct PageFour: Story {
+                           var myStory: some Prose {
+                               ChoicePage {
+                                   
+                               }
+                           }
+                       }
+                       ```
+                    } 
+                    
+                    @Page(id: "3.codeChoices", title: "") {
+                      To add this page to your story, add it to your list of `stories` in `MyAdventureStoryBook`. 
+                      Add the following code to `stories` below `PageThree()`.
+                      ```
+                      PageFour() // 4
+                      ```
+                    } 
+                    @Page(id: "4.codeChoices", title: "") {
+                        Now that you've added a fourth `Page`, you can reference it as a destination in either `PageTwo` or `PageThree`. 
+                        
+                        You can add whatever title you want as the `Choice` for `PageFour`, but the destination will be Page 4. 
+                    
+                        ```
+                        Choice(title: "📝", destination: 4)
+                        ```
+                    }
+                    @Page(id: "5.codeChoices", title: "") {
+                        Now that you know how the pattern works, continue adding more pages, and then add those pages as choices in the pages you've already written. 
+                    }
+                    @Page(id: "5.codeChoices", title: "") {
+                        Continue writing and creating new choices for your pages until you have multiple endings and paths. Make your story as complicated and interesting as you can imagine. 
+                        
+                        Have fun!
+                    }
+               }
+            }
+        }
+    }
+}
