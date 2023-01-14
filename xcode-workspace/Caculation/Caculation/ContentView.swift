@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var totalNumber : String = "0"
     var body: some View {
         ZStack{
             Color.black.ignoresSafeArea()
@@ -15,21 +16,26 @@ struct ContentView: View {
                 Spacer()
                 HStack{
                     Spacer()
-                    Text("331,460")
+                    Text(totalNumber)
                         .foregroundColor(.white)
                         .font(.system(size :73))
                         .padding()
                 }
                 HStack{
-                    Text("C")
-                        .frame(
-                            width: 80,
-                            height: 80
-                        )
-                        .background(.white)
-                        .cornerRadius(40)
-                        .foregroundColor(.black)
-                        .font(.system(size:33))
+                    Button{
+                        totalNumber = "0"
+                    }
+                label:{
+                         Text("C")
+                            .frame(
+                                width: 80,
+                                height: 80
+                            )
+                            .background(.white)
+                            .cornerRadius(40)
+                            .foregroundColor(.black)
+                            .font(.system(size:33))
+                     }
                     Text("+")
                         .frame(
                             width: 80,
@@ -61,6 +67,12 @@ struct ContentView: View {
                 }
                 HStack{
                     Button{
+                        if totalNumber == "0"{
+                            totalNumber = "7"
+                        }else{
+                            totalNumber += "7"
+                        }
+                                
                         
                     }label : {
                         Text("7")
@@ -68,7 +80,7 @@ struct ContentView: View {
                                 width: 80,
                                 height: 80
                             )
-                            .background(.gray)
+                            .background(Color("NumberBtn"))
                             .cornerRadius(40)
                             .foregroundColor(.white)
                             .font(.system(size:33))
