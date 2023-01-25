@@ -44,11 +44,11 @@ enum ButtonType : String  {
         case .multiple :
             return "X"
         case .devide :
-            return "$"
+            return "/"
         case .percent :
             return "%"
         case .opposite :
-            return "/"
+            return "+/-"
         case .clear:
             return "C"
             
@@ -79,6 +79,8 @@ enum ButtonType : String  {
 }
 struct ContentView: View {
     @State private var totalNumber : String = "0"
+    @State var tempNumber : Int = 0
+    @State var operatorType : ButtonType = .clear
     
     private let buttonData : [[ButtonType]] =
     [
@@ -125,6 +127,30 @@ struct ContentView: View {
                                 else{
                                     if item == .clear {
                                         totalNumber = "0"
+                                    } else if item == .plus {
+                                        tempNumber = Int(totalNumber) ?? 0
+                                        operatorType = .plus
+                                        totalNumber = "0"
+                                    } else if item == .multiple {
+                                        tempNumber = Int(totalNumber) ?? 0
+                                        operatorType = .multiple
+                                        totalNumber = "0"
+                                    } else if item == .minus {
+                                        tempNumber = Int(totalNumber) ?? 0
+                                        operatorType = .minus
+                                        totalNumber = "0"
+                                    }
+                                    else if item == .equal {
+                                        
+                                        if operatorType == .plus{
+                                            totalNumber = String((Int(totalNumber) ?? 0) +  tempNumber)
+                                        }
+                                        else if operatorType == .multiple{
+                                            totalNumber = String((Int(totalNumber) ?? 0) *  tempNumber)
+                                        }
+                                        else if operatorType == .minus{
+                                            totalNumber = String(tempNumber - (Int(totalNumber) ?? 0) )
+                                        }
                                     }
                                     else{
                                         totalNumber += item.ButtonDisplayName
@@ -132,9 +158,10 @@ struct ContentView: View {
                                 }
                             }label : {
                                 Text(item.ButtonDisplayName)
+                                    .bold()
                                     .frame(
-                                        width: item == .some(.zero) ? 160 : 80,
-                                        height: 80
+                                        width: calculateButtonWidth(button : item),
+                                        height: calculateButtonHeight(button: item)
                                     )
                                     .background(item.backgroundColor)
                                     .cornerRadius(40)
@@ -146,6 +173,20 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    private func calculateButtonWidth(button buttonType: ButtonType ) -> CGFloat{
+        switch  buttonType {
+        case .zero:
+            return ((UIScreen.main.bounds.width - 5*10) / 4)*2
+            
+        default :
+            return (UIScreen.main.bounds.width - 5*10) / 4
+        }
+        
+    }
+    private func calculateButtonHeight(button :  ButtonType ) -> CGFloat{
+        return (UIScreen.main.bounds.width - 5*10) / 4
+        
     }
 }
 
