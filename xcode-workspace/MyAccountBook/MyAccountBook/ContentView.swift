@@ -16,9 +16,15 @@ struct MainScrollView : View{
                 // 같은기능임
                 //                Text("Item \($0)").font(.title)
                 AccountRow()
-            }.frame(maxWidth: .infinity)
-                .background(.white)
+            }
+            .padding()
+            .padding()
+            .frame(maxWidth: .infinity)
         }
+        .frame(width: .infinity)
+        .background(.white)
+        .cornerRadius(20)
+        .padding()
     }
 }
 
@@ -34,14 +40,18 @@ struct AccountRow : View{
         HStack{
             // 로고자리
             Text("💸")
-                .frame(width: 40, height: 40)
-                .background(.secondary)
+                .font(.system(size: 45))
+                .cornerRadius(0.3)
             Spacer()
             // 타이틀
             VStack{
-                Text("타이틀")
-                Text("금액")
-            }.background(.gray)
+                Text("커피/음료수")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                Text("890,023원")
+                    .font(.title3)
+            }
+            
             Spacer()
             // Button 자리
             buttonArea
