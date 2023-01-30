@@ -11,6 +11,8 @@
 		862B7C3129824AD30078E284 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862B7C3029824AD30078E284 /* ContentView.swift */; };
 		862B7C3329824AD30078E284 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 862B7C3229824AD30078E284 /* Assets.xcassets */; };
 		862B7C3629824AD30078E284 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 862B7C3529824AD30078E284 /* Preview Assets.xcassets */; };
+		8675A6FC298833F600236540 /* AccountBookModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8675A6FB298833F600236540 /* AccountBookModel.swift */; };
+		8675A6FE2988340400236540 /* AccountDatamanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8675A6FD2988340400236540 /* AccountDatamanager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		862B7C3029824AD30078E284 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		862B7C3229824AD30078E284 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		862B7C3529824AD30078E284 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8675A6FB298833F600236540 /* AccountBookModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBookModel.swift; sourceTree = "<group>"; };
+		8675A6FD2988340400236540 /* AccountDatamanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDatamanager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				862B7C2E29824AD30078E284 /* MyAccountBookApp.swift */,
 				862B7C3029824AD30078E284 /* ContentView.swift */,
+				8675A6FB298833F600236540 /* AccountBookModel.swift */,
+				8675A6FD2988340400236540 /* AccountDatamanager.swift */,
 				862B7C3229824AD30078E284 /* Assets.xcassets */,
 				862B7C3429824AD30078E284 /* Preview Content */,
 			);
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				862B7C3129824AD30078E284 /* ContentView.swift in Sources */,
+				8675A6FE2988340400236540 /* AccountDatamanager.swift in Sources */,
 				862B7C2F29824AD30078E284 /* MyAccountBookApp.swift in Sources */,
+				8675A6FC298833F600236540 /* AccountBookModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
