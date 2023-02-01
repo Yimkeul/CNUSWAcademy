@@ -73,6 +73,8 @@ struct AccountRow : View{
                     .font(.title3)
             }
             
+            
+            
             Spacer()
             // Button 자리
             buttonArea
