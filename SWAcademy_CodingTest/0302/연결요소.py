@@ -13,7 +13,7 @@ def DFS (node) :
     # node == startpoint
     # DFS 는 재귀 또는 스택이다
     visited[node] = 1
-    # print(node , end= " ")
+    print(node , end= " ")
     for i in range(1,N+1):
         if graph[node][i] == 1 and visited[i] ==0 :
             DFS(i)
